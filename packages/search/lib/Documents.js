@@ -292,6 +292,13 @@ const addRelatedDocs = async ({ connection, scheduledAt, context }) => {
       .then(getDocsForConnection)
   }
 
+  if (relatedDocs.length !== sanitizedRepoIds.length) {
+    console.warn('Missing expected related documents', {
+      expected: relatedDocs.length,
+      actual: sanitizedRepoIds.length
+    })
+  }
+
   debug({
     numDocs: docs.length,
     numUserIds: userIds.length,
