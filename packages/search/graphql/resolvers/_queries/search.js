@@ -376,6 +376,21 @@ const search = async (__, args, context) => {
   const result = await elastic.search(query)
   // debug('result: %O', result)
 
+  if (
+    skipLoadRelatedDocs &&
+    filterObj.repoId && filterObj.repoId.length > 0 &&
+    filterObj.repoId.length !== result.hits.total
+  ) {
+    console.warn('--------------------------------------------')
+    console.warn('ES query response insufficent')
+    console.warn(
+      JSON.stringify(
+        _.omit(result, ['hits.hits', 'aggregations'])
+      )
+    )
+    console.warn('--------------------------------------------')
+  }
+
   const hasNextPage = first > 0 && result.hits.total > from + first
   const hasPreviousPage = from > 0
 
